@@ -10,16 +10,25 @@ class RoleEngine:
         pygame.quit()
 
     class Init:
+        index = 0
+
         def __init__(self):
-            pygame.init()
-            RoleEngine.Init._InitDisplay((640, 480), f"RoleEngine - {RoleEngine.displayCaption}")
-            RoleEngine.Display.Fill(RoleEngine.BG_COLOR)
+            if RoleEngine.Init.index == 0:
+                pygame.init()
+                RoleEngine.Display.setFramerateLimit(30)
+                RoleEngine.Init._InitDisplay((640, 480), f"RoleEngine - {RoleEngine.displayCaption}")
+                RoleEngine.Display.Fill(RoleEngine.BG_COLOR)
+                RoleEngine.Init.index += 1
+            else:
+                pass
 
         def _InitDisplay(resolution = tuple, caption = str):
             RoleEngine.DISPLAY.set_caption(caption)
             RoleEngine.displaySurface = RoleEngine.DISPLAY.set_mode(resolution)
 
     class Display:
+        clock = pygame.time.Clock()
+
         def setResolution(resolution = tuple):
             RoleEngine.displaySurface = RoleEngine.DISPLAY.set_mode(resolution)
 
@@ -37,3 +46,6 @@ class RoleEngine:
         
         def Update():
             RoleEngine.DISPLAY.update()
+
+        def setFramerateLimit(value = int):
+            RoleEngine.Display.clock.tick(value)

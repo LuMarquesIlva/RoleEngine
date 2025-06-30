@@ -1,27 +1,30 @@
 import pygame
 
-class UpdateDisplayInput():
+class DisplayInput():
     runVar = bool
 
-    def __init__(self):
+    def Update():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                UpdateDisplayInput.setRunVar(False)
+                DisplayInput.setRunVar(False)
                 break
     
     def setRunVar(runVar = bool):
-        UpdateDisplayInput.runVar = runVar
+        DisplayInput.runVar = runVar
     
     def getRunVar():
-        return UpdateDisplayInput.runVar
+        return DisplayInput.runVar
 
 class Input:
     class Keyboard:
         def __init__(self):
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    match event:
-                        case pygame.K_UP:
-                            print("UP")
-                        case _:
+            pass
+
+        def updateInput():
+            if pygame.event.peek() == True:
+                for keys in pygame.event.get(pygame.KEYDOWN):
+                    match keys.key:
+                        case pygame.K_w:
+                            print("W")
+                        case _: 
                             print("Could not get Input")
