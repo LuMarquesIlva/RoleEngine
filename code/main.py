@@ -1,12 +1,11 @@
 from core import RoleEngine
-from input import DisplayInput, Input
+from input import Input
 
 RoleEngine.Init()
 
-DisplayInput.setRunVar(True)
-while DisplayInput.getRunVar() == True:
-    DisplayInput.Update()
-    Input.Keyboard.updateInput()
+Input.setRunVar(True)
+while Input.getRunVar() == True:
+    Input.Update()
     
     RoleEngine.Display.Update()
 
