@@ -1,3 +1,4 @@
+from input import Input
 import pygame
 
 class RoleEngine:
@@ -15,6 +16,7 @@ class RoleEngine:
         def __init__(self):
             if RoleEngine.Init.index == 0:
                 pygame.init()
+                Input.Joystick.checkForJoysticks()
                 RoleEngine.Display.setFramerateLimit(30)
                 RoleEngine.Init._InitDisplay((640, 480), f"RoleEngine - {RoleEngine.displayCaption}")
                 RoleEngine.Display.Fill(RoleEngine.BG_COLOR)
@@ -23,6 +25,7 @@ class RoleEngine:
                 pass
 
         def _InitDisplay(resolution = tuple, caption = str):
+            Input.setRunVar(True)
             RoleEngine.DISPLAY.set_caption(caption)
             RoleEngine.displaySurface = RoleEngine.DISPLAY.set_mode(resolution)
 
@@ -35,8 +38,12 @@ class RoleEngine:
         def getResolution():
             return RoleEngine.DISPLAY.get_window_size()
         
-        def setCaption(caption = str):
+        def setFullCaption(caption = str):
             RoleEngine.DISPLAY.set_caption(caption)
+        
+        def setCaption(caption = str):
+            RoleEngine.displayCaption = caption
+            RoleEngine.DISPLAY.set_caption(f"RoleEngine - {RoleEngine.displayCaption}")
 
         def getCaption():
             return RoleEngine.DISPLAY.get_caption()
