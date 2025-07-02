@@ -20,6 +20,7 @@ class RoleEngine:
                 RoleEngine.Display.setFramerateLimit(30)
                 RoleEngine.Init._InitDisplay((640, 480), f"RoleEngine - {RoleEngine.displayCaption}")
                 RoleEngine.Display.Fill(RoleEngine.BG_COLOR)
+                #RoleEngine.Display.setWindowIcon("../images/RoleEngineIconPH.png")
                 RoleEngine.Init.index += 1
             else:
                 pass
@@ -56,3 +57,9 @@ class RoleEngine:
 
         def setFramerateLimit(value = int):
             RoleEngine.Display.clock.tick(value)
+        
+        #TODO fix this
+        def setWindowIcon(icon = __file__):
+            icon = pygame.surface.Surface((124, 124))
+            window = pygame.window.Window.id
+            pygame.Window.set_icon(window, icon)
