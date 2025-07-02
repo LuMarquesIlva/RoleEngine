@@ -28,6 +28,8 @@ class Input():
                         print("S")
                     case pygame.K_d:
                         print("D")
+                    case pygame.K_f:
+                        Input.Mouse.setMousePosition(30, 30)
                     case _: 
                         print("Could not get Input")
 
@@ -59,8 +61,33 @@ class Input():
                             print("Controller Triangle")
                         case 3:
                             print("Controller Square")
+                        case 4:
+                            print("Controller L1")
+                        case 5:
+                            print("Controller R1")
                         case _:
                             print("Invalid Button")
+    class Mouse:
+        def getMousePosition():
+            if pygame.event.peek(pygame.MOUSEMOTION):
+                for mouseEventMotion in pygame.event.get(pygame.MOUSEMOTION):
+                    return pygame.mouse.get_pos()
+        
+        def setMousePosition(x = float, y = float):
+            pygame.mouse.set_pos(x, y)
+                
+        def getMouseButtons():
+            if pygame.event.peek(pygame.MOUSEBUTTONDOWN):
+                for mouseEventButton in pygame.event.get(pygame.MOUSEBUTTONDOWN):
+                    if mouseEventButton.button != None:
+                        return mouseEventButton.button
+                    else:
+                        pass
+
+        def getMouseWheel():
+            if pygame.event.peek(pygame.MOUSEWHEEL):
+                for mouseEventWheel in pygame.event.get(pygame.MOUSEWHEEL):
+                    return mouseEventWheel
     
     def setRunVar(runVar = bool):
         Input.runVar = runVar
