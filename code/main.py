@@ -4,18 +4,28 @@ from objects import Entity, Object
 
 RoleEngine.Init()
 x = 6.0
+y = 3.0
 
 while Input.getRunVar() == True:
+    RoleEngine.Display.Fill(RoleEngine.BG_COLOR)
 
-    Input.Update()
+    keys = Input.Update()
+    if keys != None:
+        #print(keys)
+        pass
+    match keys:
+        case "W":
+            y -= 6.0
+        case "A":
+            x -= 6.0
+        case "S":
+            y += 6.0
+        case "D":
+            x += 6.0
+        case _:
+            pass
 
-    if Input.Keyboard.getPressedKeys() != None:
-        print(Input.Keyboard.getPressedKeys())
-        for key in Input.Keyboard.getPressedKeys():
-            if key == "D":
-                x += 50.0
-
-    teste = Object.Rect.createRectObject(0, "Teste", (x, 60.0, 160.0, 160.0))
+    teste = Object.Rect.createRectObject(0, "Teste", (x, y, 80.0, 80.0))
     Entity.drawRectEntity(teste, (100, 100, 100, 255))
 
     RoleEngine.Display.Update()

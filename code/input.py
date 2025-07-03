@@ -6,8 +6,9 @@ class Input():
     def Update():
         if pygame.event.peek() == True:
             Input.Display.Update()
-            Input.Keyboard.Update()
             Input.Joystick.Update()
+            key = Input.Keyboard.Update()
+        return key
 
     class Display:
         def Update():
@@ -17,21 +18,32 @@ class Input():
                         break
             
     class Keyboard:
+        keyPress = False
+
         def Update():
+            #print(pygame.event.get(pygame.KEYDOWN))
             for keys in pygame.event.get(pygame.KEYDOWN):
-                match keys.key:
-                    case pygame.K_w:
-                        return "W"
-                    case pygame.K_a:
-                        return "A"
-                    case pygame.K_s:
-                        return "S"
-                    case pygame.K_d:
-                        return "D"
-                    case pygame.K_f:
-                        Input.Mouse.setMousePosition(30, 30)
-                    case _: 
-                        print("Could not get Input")
+                Input.Keyboard.keyPress = True
+                while Input.Keyboard.keyPress == True:
+                    match keys.key:
+                        case pygame.K_w:
+                            return "W"
+                        case pygame.K_a:
+                            return "A"
+                        case pygame.K_s:
+                            return "S"
+                        case pygame.K_d:
+                            print(Input.Keyboard.keyPress)
+                            return "D"
+                        case pygame.K_f:
+                            return "F"
+                        case _: 
+                            print("Could not get Input")
+            if Input.Keyboard.keyPress == True and pygame.event.get(pygame.KEYUP):
+                Input.Keyboard.keyPress = False
+                print('FUnciona')
+            else:
+                Input.Keyboard.keyPress = True
         
         #TODO Figure out a way to get the pressed keys with a single function
         def getPressedKeys():
