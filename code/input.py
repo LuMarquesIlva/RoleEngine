@@ -21,17 +21,29 @@ class Input():
             for keys in pygame.event.get(pygame.KEYDOWN):
                 match keys.key:
                     case pygame.K_w:
-                        print("W")
+                        return "W"
                     case pygame.K_a:
-                        print("A")
+                        return "A"
                     case pygame.K_s:
-                        print("S")
+                        return "S"
                     case pygame.K_d:
-                        print("D")
+                        return "D"
                     case pygame.K_f:
                         Input.Mouse.setMousePosition(30, 30)
                     case _: 
                         print("Could not get Input")
+        
+        #TODO Figure out a way to get the pressed keys with a single function
+        def getPressedKeys():
+            keys = []
+            key = Input.Keyboard.Update()
+
+            if keys != None:
+                keys.append(key)
+                for Keys in keys:
+                    return Keys
+            else:
+                pass
 
     class Joystick:
         Joysticks = []
