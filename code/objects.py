@@ -1,4 +1,4 @@
-from core import RoleEngine
+from display import Display
 import pygame
 
 #TODO create and object and entity class with support for easy handling by abstracting
@@ -46,4 +46,4 @@ class Entity(Object):
     Color = (200, 200, 200, 200)
 
     def drawRectEntity(rect = RectObject, color = (int, int, int, int)):
-        return pygame.draw.rect(RoleEngine.displaySurface, color, rect["Type"])
+        return pygame.draw.rect(Display.displaySurface, color, rect["Type"])

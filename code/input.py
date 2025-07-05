@@ -1,3 +1,4 @@
+from display import Display as DP
 import pygame
 
 class Input():
@@ -8,6 +9,7 @@ class Input():
             Input.Display.Update()
             Input.Joystick.Update()
             key = Input.Keyboard.Update()
+            #DP.Update()
         return key
 
     class Display:
@@ -24,7 +26,9 @@ class Input():
             #print(pygame.event.get(pygame.KEYDOWN))
             for keys in pygame.event.get(pygame.KEYDOWN):
                 Input.Keyboard.keyPress = True
-                while Input.Keyboard.keyPress == True:
+                print("Tecla")
+                if keys != None:
+                    print("Tecla 2")
                     match keys.key:
                         case pygame.K_w:
                             return "W"
@@ -33,7 +37,6 @@ class Input():
                         case pygame.K_s:
                             return "S"
                         case pygame.K_d:
-                            print(Input.Keyboard.keyPress)
                             return "D"
                         case pygame.K_f:
                             return "F"
@@ -41,9 +44,9 @@ class Input():
                             print("Could not get Input")
             if Input.Keyboard.keyPress == True and pygame.event.get(pygame.KEYUP):
                 Input.Keyboard.keyPress = False
-                print('FUnciona')
+                print('Funciona')
             else:
-                Input.Keyboard.keyPress = True
+                pass
         
         #TODO Figure out a way to get the pressed keys with a single function
         def getPressedKeys():
