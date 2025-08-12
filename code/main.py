@@ -23,31 +23,45 @@ def draw():
 while Input.getRunVar() == True:
 
     keys = Input.Update()
-    if keys != None:
-        print(keys)
 
     inputIndex = 0
     while Input.Keyboard.keyPress == True and keys != None:
-        match keys:
-            case "W":
+        for key in keys:
+            if key == "w":
                 y -= 1.0
+                if key == "d":
+                    x += 1.0
+                elif key == "a":
+                    x -= 1.0
                 updateScreen()
                 draw()
-            case "A":
+            if key == "a":
                 x -= 1.0
+                if key == "w":
+                    y -= 1.0
+                elif key == "s":
+                    y += 1.0
                 updateScreen()
                 draw()
-            case "S":
+            if key == "s":
                 y += 1.0
+                if key == "d":
+                    x += 1.0
+                elif key == "a":
+                    x -= 1.0
                 updateScreen()
                 draw()
-            case "D":
+            if key == "d":
                 x += 1.0
+                if key == "w":
+                    y -= 1.0
+                elif key == "s":
+                    y += 1.0
                 updateScreen()
                 draw()
-            case _:
-                pass
-        
+            if key == "q":
+                Input.setRunVar(False)
+                
         if inputIndex >= 5:
             inputIndex = 0
         

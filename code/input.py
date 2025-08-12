@@ -8,9 +8,10 @@ class Input():
         if pygame.event.peek() == True:
             Input.Display.Update()
             Input.Joystick.Update()
-            key = Input.Keyboard.Update()
+            keys = Input.Keyboard.getPressedKeys()
+            #print(keys)
             #DP.Update()
-        return key
+        return keys
 
     class Display:
         def Update():
@@ -26,39 +27,53 @@ class Input():
             #print(pygame.event.get(pygame.KEYDOWN))
             for keys in pygame.event.get(pygame.KEYDOWN):
                 Input.Keyboard.keyPress = True
-                print("Tecla")
+                #print("Tecla")
                 if keys != None:
-                    print("Tecla 2")
-                    match keys.key:
-                        case pygame.K_w:
-                            return "W"
-                        case pygame.K_a:
-                            return "A"
-                        case pygame.K_s:
-                            return "S"
-                        case pygame.K_d:
-                            return "D"
-                        case pygame.K_f:
-                            return "F"
-                        case _: 
-                            print("Could not get Input")
-            if Input.Keyboard.keyPress == True and pygame.event.get(pygame.KEYUP):
+                    #print("Tecla 2")
+                    return pygame.key.name(keys.key)
+                
+                    #match keys.key:
+                        #case pygame.K_w:
+                            #return "W"
+                        #case pygame.K_a:
+                            #return "A"
+                        #case pygame.K_s:
+                            #return "S"
+                        #case pygame.K_d:
+                            #return "D"
+                        #case pygame.K_f:
+                            #return "F"
+                        #case _: 
+                            #print("Could not get Input")
+            if pygame.event.get(pygame.KEYUP):
                 Input.Keyboard.keyPress = False
-                print('Funciona')
+                #print('Funciona')
             else:
                 pass
         
         #TODO Figure out a way to get the pressed keys with a single function
         def getPressedKeys():
+            ind = 0
+            time = 0
             keys = []
-            key = Input.Keyboard.Update()
+            lastKey = None
 
-            if keys != None:
-                keys.append(key)
-                for Keys in keys:
-                    return Keys
+            while pygame.key.get_pressed():
+                key = Input.Keyboard.Update()
+                #print(
+                if key != lastKey and key != None:
+                    #print(key)
+                    keys.append(key)
+                    pygame.time.wait(30)
+                if ind >= 2:
+                    return keys
+                lastKey = key
+                ind += 1
+                time += 1
             else:
-                pass
+                if keys[1] != None:
+                    #print("Else", keys)
+                    pass
 
     class Joystick:
         Joysticks = []
