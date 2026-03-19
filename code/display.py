@@ -1,5 +1,5 @@
 import pygame
-
+from pygame_vkeyboard import *
 
 class Display:
     DISPLAY = pygame.display
@@ -10,9 +10,7 @@ class Display:
     clock = pygame.time.Clock()
 
     def setResolution(resolution=tuple):
-        Display.displaySurface = Display.DISPLAY.set_mode(
-            resolution, pygame.OPENGL | pygame.DOUBLEBUF
-        )
+        Display.displaySurface = Display.DISPLAY.set_mode(resolution)
 
     def getResolution():
         return Display.DISPLAY.get_window_size()
@@ -30,8 +28,8 @@ class Display:
     def Fill(color=tuple):
         Display.displaySurface.fill(color)
 
-    def Update():
-        Display.DISPLAY.update()
+    def Update(keyboard):
+        Display.DISPLAY.update(keyboard)
 
     def setFramerateLimit(value=int):
         Display.clock.tick(value)
@@ -41,3 +39,7 @@ class Display:
         icon = pygame.surface.Surface((124, 124))
         window = pygame.window.Window.id
         pygame.Window.set_icon(window, icon)
+
+class vKeyboard:
+    def __init__(self):
+        pass

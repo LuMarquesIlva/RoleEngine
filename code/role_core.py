@@ -3,8 +3,6 @@ from code.input import Input
 
 import pygame
 
-from mglw_code.modernGL_Funcs import runWin
-
 
 class RoleEngine:
     def Quit():
@@ -14,13 +12,12 @@ class RoleEngine:
         index = 0
 
         def __init__(self):
+            super()
             if RoleEngine.Init.index == 0:
-                runWin()
                 pygame.joystick.init()
                 Input.Joystick.checkForJoysticks()
-                """RoleEngine.Init._InitDisplay(
-                    (640, 480), f"RoleEngine - {Display.displayCaption}"
-                )
+                RoleEngine.Init._InitDisplay(
+                    (640, 480), f"RoleEngine - {Display.displayCaption}"                )
                 Display.setFramerateLimit(30)
                 Display.Fill(Display.BG_COLOR)
                 # RoleEngine.Display.setWindowIcon("../images/RoleEngineIconPH.png")"""

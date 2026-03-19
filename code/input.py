@@ -11,10 +11,14 @@ class Input:
             Input.Display.Update()
             Input.Joystick.Update()
             keys = Input.Keyboard.getPressedKeys()
+            joys = Input.Joystick.Update()
             # print(keys)
             # DP.Update()
             if keys is not None:
                 return keys
+            if joys is not None:
+                return joys
+            return pygame.event.get()
         else:
             pass
 
@@ -125,10 +129,12 @@ class Input:
                     match joyButton.button:
                         case 0:
                             print(f"Controller {joyButton.joy} X")
+                            return joyButton.joy
                         case 1:
                             print(f"Controller {joyButton.joy} Circle")
                         case 2:
                             print(f"Controller {joyButton.joy} Square")
+                            return  joyButton.joy
                         case 3:
                             print(f"Controller {joyButton.joy} Triangle")
                         case 4:
@@ -139,6 +145,7 @@ class Input:
                             print(f"Controller {joyButton.joy} Select")
                         case 7:
                             print(f"Controller {joyButton.joy} Start")
+                            return joyButton.joy
                         case 8:
                             print(f"Controller {joyButton.joy} L3")
                         case 9:
@@ -154,12 +161,16 @@ class Input:
                     match joyHat.value:
                         case (1, 0):
                             print(f"Controller {joyHat.joy} Hat Right")
+                            return joyHat.joy
                         case (-1, 0):
                             print(f"Controller {joyHat.joy} Hat Left")
                         case (0, 1):
+                            return joyHat.joy
                             print(f"Controller {joyHat.joy} Hat Up")
+                            return joyHat.joy
                         case (0, -1):
                             print(f"Controller {joyHat.joy} Hat Down")
+                            return joyHat.joy
 
                 for joyAxis in pygame.event.get(pygame.JOYAXISMOTION):
                     match joyAxis.axis:
@@ -167,22 +178,28 @@ class Input:
                             print(
                                 f"Controller {joyAxis.joy} Left Analog V: Value {joyAxis.value}"
                             )
+                            return joyAxis.value
                         case 1:
                             print(
                                 f"Controller {joyAxis.joy} Left Analog H: Value {joyAxis.value}"
                             )
+                            return joyAxis.value
                         case 2:
                             print(
                                 f"Controller {joyAxis.joy} Right Analog V: Value {joyAxis.value}"
                             )
+                            return joyAxis.value
                         case 3:
                             print(
                                 f"Controller {joyAxis.joy} Right Analog H: Value {joyAxis.value}"
                             )
+                            return joyAxis.value
                         case 4:
                             print(f"Controller {joyAxis.joy} L2: Value {joyAxis.value}")
+                            return joyAxis.value
                         case 5:
                             print(f"Controller {joyAxis.joy} R2: Value {joyAxis.value}")
+                            return joyAxis.value
 
     class Mouse:
         def getMousePosition():

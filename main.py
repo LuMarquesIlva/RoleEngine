@@ -5,6 +5,7 @@ from code.objects import Entity, Object
 from code.role_core import RoleEngine
 
 import pygame
+from pygame_vkeyboard import *
 
 RoleEngine.Init()
 x = 300.0
@@ -22,10 +23,24 @@ def draw():
 
     teste = Object.Rect.createRectObject(0, "Teste", (x, y, 80.0, 80.0))
     Entity.drawRectEntity(teste, (100, 250, 100, 255))
-
+    
+def consumer(text):
+    return text
+    
+if not pygame.font.get_init():
+    pygame.font.init()   
+font = pygame.font.Font("font/04B_03__.TTF", 12)
+    
+layout = VKeyboardLayout(VKeyboardLayout.QWERTY)
+layout.size = 5
+keyboard = VKeyboard(Display.displaySurface, consumer, layout)
 
 while Input.getRunVar() is True:
+    
     keys = Input.Update()
+    keyboard.update(pygame.event.get())
+    
+    
     if keys is not None:
         print(keys)
 
@@ -38,8 +53,9 @@ while Input.getRunVar() is True:
                     x += 1.0
                 elif key == "a":
                     x -= 1.0
-                updateScreen()
+                
                 draw()
+                updateScreen()
             if key == "a":
                 x -= 1.0
                 if key == "w":
@@ -64,7 +80,7 @@ while Input.getRunVar() is True:
                     y += 1.0
                 updateScreen()
                 draw()
-            if key == "q":
+            if key == "q" or key == "menu":
                 Input.setRunVar(False)
 
         if inputIndex >= 5:
@@ -74,7 +90,8 @@ while Input.getRunVar() is True:
             Input.Keyboard.keyPress = False
 
     draw()
-
-    Display.Update()
+    
+    rects = keyboard.draw(Display.DISPLAY.get_surface())
+    Display.Update(rects)
 
 RoleEngine.Quit()
