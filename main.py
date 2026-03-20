@@ -1,97 +1,66 @@
+#!.venv/Scripts/python.exe
+
 import threading
-from code.display import Display
-from code.input import Input
-from code.objects import Entity, Object
-from code.role_core import RoleEngine
+from scripts.display import Display
+from scripts.input import Input
+from scripts.objects import Entity, Object
+from scripts.role_core import RoleEngine
 
 import pygame
-from pygame_vkeyboard import *
 
 RoleEngine.Init()
-x = 300.0
-y = 400.0
-
+velocity = 0.5
 
 def updateScreen():
     screen_thread = threading.Thread(target=Display.Update())
     screen_thread.start()
     screen_thread.join()
 
+teste = Object.Rect.createRectObject(0, "Teste", (300, 400, 40.0, 40.0))
 
 def draw():
     Display.Fill(Display.BG_COLOR)
 
-    teste = Object.Rect.createRectObject(0, "Teste", (x, y, 80.0, 80.0))
     Entity.drawRectEntity(teste, (100, 250, 100, 255))
-    
-def consumer(text):
-    return text
+    Display.Update()
     
 if not pygame.font.get_init():
     pygame.font.init()   
-font = pygame.font.Font("font/04B_03__.TTF", 12)
-    
-layout = VKeyboardLayout(VKeyboardLayout.QWERTY)
-layout.size = 5
-keyboard = VKeyboard(Display.displaySurface, consumer, layout)
 
 while Input.getRunVar() is True:
     
-    keys = Input.Update()
-    keyboard.update(pygame.event.get())
-    
-    
-    if keys is not None:
-        print(keys)
+    inputEvents = Input.Update()
 
-    inputIndex = 0
-    while Input.Keyboard.keyPress and keys is not None:
-        for key in keys:
-            if key == "w":
-                y -= 1.0
-                if key == "d":
-                    x += 1.0
-                elif key == "a":
-                    x -= 1.0
-                
-                draw()
-                updateScreen()
-            if key == "a":
-                x -= 1.0
-                if key == "w":
-                    y -= 1.0
-                elif key == "s":
-                    y += 1.0
-                updateScreen()
-                draw()
-            if key == "s":
-                y += 1.0
-                if key == "d":
-                    x += 1.0
-                elif key == "a":
-                    x -= 1.0
-                updateScreen()
-                draw()
-            if key == "d":
-                x += 1.0
-                if key == "w":
-                    y -= 1.0
-                elif key == "s":
-                    y += 1.0
-                updateScreen()
-                draw()
-            if key == "q" or key == "menu":
-                Input.setRunVar(False)
+    if inputEvents == "q" or inputEvents == "menu" or inputEvents == pygame.QUIT:
+        Input.setRunVar(False)
+        pygame.quit()
+        break
 
-        if inputIndex >= 5:
-            inputIndex = 0
+    while inputEvents is not None and type(inputEvents) is not int and pygame.event.peek(pygame.KEYUP) == False:
+        eventString = ''.join(inputEvents)
 
-        if pygame.event.get(pygame.KEYUP):
-            Input.Keyboard.keyPress = False
+        #if pygame.event.peek(pygame.KEYDOWN) > 1:
+            #eventString = eventString.join(pygame.event.get(pygame.KEYDOWN[1]))
+        #print(eventString)
+        #print("INPUT: " + str(eventString))
+        for event in inputEvents:
+            match eventString:
+                case 'w':
+                    teste["RectObject"].y -= 1 * velocity
+                case 'wd':
+                    teste["RectObject"].x += 1 * velocity
+                    teste["RectObject"].y -= 1 * velocity
+                case 'a':
+                    teste["RectObject"].x -= 1 * velocity
+                case 's':
+                    teste["RectObject"].y += 1 * velocity
+                case 'd':
+                    teste["RectObject"].x += 1 * velocity
+                case _:
+                    pass
+        draw()
+        continue
 
     draw()
-    
-    rects = keyboard.draw(Display.DISPLAY.get_surface())
-    Display.Update(rects)
 
-RoleEngine.Quit()
+pygame.quit()

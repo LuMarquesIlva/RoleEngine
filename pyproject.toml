@@ -1,0 +1,15 @@
+[project]
+name = "Role Engine"
+version = "0.0.1"
+description = "Uma engine feita utilizando pygame"
+readme = "README.md"
+requires-python = ">=3.14"
+license = {text = "MIT"}
+authors = [
+    {name = "Elsarques", email = "public_elsarques.email821@passinbox.com"},
+]
+
+[dependency-groups]
+dev = [
+    "pygame-ce>=2.5.7",
+]

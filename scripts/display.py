@@ -1,5 +1,4 @@
 import pygame
-from pygame_vkeyboard import *
 
 class Display:
     DISPLAY = pygame.display
@@ -28,8 +27,8 @@ class Display:
     def Fill(color=tuple):
         Display.displaySurface.fill(color)
 
-    def Update(keyboard):
-        Display.DISPLAY.update(keyboard)
+    def Update():
+        Display.DISPLAY.update()
 
     def setFramerateLimit(value=int):
         Display.clock.tick(value)

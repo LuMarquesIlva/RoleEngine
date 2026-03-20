@@ -1,34 +1,37 @@
-from code.display import Display as DP
+from scripts.display import Display as DP
 
 import pygame
-
 
 class Input:
     runVar = bool
 
     def Update():
+        if pygame.event.peek(pygame.QUIT):
+            quitEvent = Input.Display.Update()
+
+            if quitEvent is not None:
+                return quitEvent
+                
+
         if pygame.event.peek(pygame.KEYDOWN):
-            Input.Display.Update()
-            Input.Joystick.Update()
             keys = Input.Keyboard.getPressedKeys()
-            joys = Input.Joystick.Update()
-            # print(keys)
-            # DP.Update()
             if keys is not None:
                 return keys
+            Input.Display.Update()
+
+        if pygame.event.peek(pygame.JOYHATMOTION):
+            joys = Input.Joystick.Update()
+            
             if joys is not None:
                 return joys
+            
             return pygame.event.get()
-        else:
-            pass
 
     class Display:
-        def Update() -> None:
-            print("SAIDA")
-            for event in pygame.event.get(pygame.QUIT):
+        def Update():
+            for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    Input.setRunVar(False)
-                    break
+                    return pygame.QUIT
 
     class Keyboard:
         keyPress = False
@@ -70,9 +73,9 @@ class Input:
 
             while pygame.key.get_pressed():
                 key = Input.Keyboard.Update()
-                # print(
+                
                 if key != lastKey and key != None:
-                    # print(key)
+                    
                     keys.append(key)
                     pygame.time.wait(30)
                 if ind >= 2:
@@ -82,7 +85,6 @@ class Input:
                 time += 1
             else:
                 if keys[1] is not None:
-                    # print("Else", keys)
                     pass
 
     class Joystick:
@@ -164,8 +166,8 @@ class Input:
                             return joyHat.joy
                         case (-1, 0):
                             print(f"Controller {joyHat.joy} Hat Left")
-                        case (0, 1):
                             return joyHat.joy
+                        case (0, 1):
                             print(f"Controller {joyHat.joy} Hat Up")
                             return joyHat.joy
                         case (0, -1):
@@ -223,8 +225,8 @@ class Input:
                 for mouseEventWheel in pygame.event.get(pygame.MOUSEWHEEL):
                     return mouseEventWheel
 
-    def setRunVar(runVar=bool):
-        Input.runVar = runVar
+    def setRunVar(runVariable=bool):
+        Input.runVar = runVariable
 
     def getRunVar():
         return Input.runVar

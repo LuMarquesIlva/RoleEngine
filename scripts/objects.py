@@ -1,4 +1,4 @@
-from code.display import Display
+from scripts.display import Display
 
 import pygame
 
@@ -12,16 +12,15 @@ class Object:
     class Rect:
         Id = 0
         Name = ""
-        x1, y1 = 0.0, 0.0
-        x2, y2 = 0.0, 0.0
         RectObject = {"ID": int, "Name": "", "Type": pygame.rect.Rect}
 
         def createRectObject(id=int, name=str, area=(float, float, float, float)):
-            rect = pygame.rect.Rect(area[0], area[1], area[2], area[3])
             RectObject = Object.Rect.RectObject
+
+            rect = pygame.rect.Rect(area[0], area[1], area[2], area[3])
             RectObject["ID"] = id
             RectObject["Name"] = name
-            RectObject["Type"] = rect
+            RectObject["RectObject"] = rect
             return RectObject
 
 
@@ -32,4 +31,4 @@ class Entity(Object):
     Color = (200, 200, 200, 200)
 
     def drawRectEntity(rect=RectObject, color=(int, int, int, int)):
-        return pygame.draw.rect(Display.displaySurface, color, rect["Type"])
+        return pygame.draw.rect(Display.displaySurface, color, rect["RectObject"])
