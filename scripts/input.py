@@ -19,11 +19,12 @@ class Input:
                 return keys
             Input.Display.Update()
 
-        if pygame.event.peek(pygame.JOYHATMOTION):
+        if pygame.event.peek(pygame.JOYBUTTONDOWN) or pygame.event.peek(pygame.JOYAXISMOTION):
+            #print(pygame.event.get())
             joys = Input.Joystick.Update()
-            
             if joys is not None:
                 return joys
+            
             
             return pygame.event.get()
 
@@ -90,10 +91,15 @@ class Input:
     class Joystick:
         Joysticks = []
         controllerCheckingIndex = 0
+        
+        def RemoveJoystickByID(ID=int):
+            remDevice = Input.Joystick.Joysticks.pop(ID)
+            print(f"Removed {remDevice.get_name()}\n")
 
         def checkForJoysticks():
             Input.Joystick.Joysticks.clear()
             for joys in range(pygame.joystick.get_count()):
+                
                 Input.Joystick.Joysticks.append(pygame.joystick.Joystick(joys))
 
             if Input.Joystick.controllerCheckingIndex >= 3:
@@ -101,7 +107,7 @@ class Input:
 
         def printJoysticksInfo():
             for joys in Input.Joystick.Joysticks:
-                print(f"ID: {joys.get_instance_id()} - Name: {joys.get_name()}")
+                print(f"-- Joysticks --\nID: {joys.get_instance_id()} - Name: {joys.get_name()}\n")
 
         def Update():
             # print(pygame.event.get())
@@ -175,6 +181,7 @@ class Input:
                             return joyHat.joy
 
                 for joyAxis in pygame.event.get(pygame.JOYAXISMOTION):
+                    
                     match joyAxis.axis:
                         case 0:
                             print(
