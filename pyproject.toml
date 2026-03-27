@@ -1,5 +1,5 @@
 [project]
-name = "Role Engine"
+name = "Role_Engine"
 version = "0.0.1"
 description = "Uma engine feita utilizando pygame"
 readme = "README.md"

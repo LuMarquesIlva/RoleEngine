@@ -1,5 +1,6 @@
 import pygame
 
+# Classe Display: Na maior parte um Wrap para funções do Pygame
 class Display:
     DISPLAY = pygame.display
     BG_COLOR = (15, 15, 15, 255)

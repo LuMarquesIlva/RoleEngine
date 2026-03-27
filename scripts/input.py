@@ -5,82 +5,67 @@ import pygame
 class Input:
     runVar = bool
 
-    def Update():
+    def Update(): # Função Update Geral
+
+        # A primeira coisa que acontece é checar se um evento de saída foi acionado
         if pygame.event.peek(pygame.QUIT):
             quitEvent = Input.Display.Update()
 
             if quitEvent is not None:
                 return quitEvent
-                
 
+        # Checa se existe eventos de "pygame.KEYDOWN" ou tecla sendo pressionada
         if pygame.event.peek(pygame.KEYDOWN):
-            keys = Input.Keyboard.getPressedKeys()
-            if keys is not None:
+            keys = Input.Keyboard.getPressedKeys() # Pega as teclas pressionadas e coloca na variável "keys"
+            if keys is not None: # E retorna apenas se não for um valor nulo
                 return keys
+            Input.Display.Update() # Atualiza a janela de qualquer forma
+
+        # Se um controle acionou um event "JOYBUTTONDOWN" ou "JOYSAXISMOTION"
+        if pygame.event.peek(pygame.JOYBUTTONDOWN) or pygame.event.peek(pygame.JOYAXISMOTION):
+            joys = Input.Joystick.Update() # Consegue os eventos e coloca na variável joys
+            if joys is not None: # Retorna se não for um valor nulo
+                return joys
             Input.Display.Update()
 
-        if pygame.event.peek(pygame.JOYBUTTONDOWN) or pygame.event.peek(pygame.JOYAXISMOTION):
-            #print(pygame.event.get())
-            joys = Input.Joystick.Update()
-            if joys is not None:
-                return joys
-            
-            
-            return pygame.event.get()
-
+    # Classe display: Funções da janela
     class Display:
         def Update():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return pygame.QUIT
 
+    # Classe Keyboard: Funções do Teclado
     class Keyboard:
-        keyPress = False
+        keyPress = False # Essa variável precisa ser inicializada como false para uso posterior
 
-        def Update():
-            # print(pygame.event.get(pygame.KEYDOWN))
-            for keys in pygame.event.get(pygame.KEYDOWN):
-                Input.Keyboard.keyPress = True
-                # print("Tecla")
-                if keys is not None:
-                    # print("Tecla 2")
+        def Update(): # Atualiza os eventos do Teclado
+            for keys in pygame.event.get(pygame.KEYDOWN): # Para cada evento de tecla retorna como keys
+                Input.Keyboard.keyPress = True # Aciona o estado de pressionamento de tecla
+                if keys is not None: # Retorna a tecla <keys.key> se não for nulo 
                     return pygame.key.name(keys.key)
 
-                    # match keys.key:
-                    # case pygame.K_w:
-                    # return "W"
-                    # case pygame.K_a:
-                    # return "A"
-                    # case pygame.K_s:
-                    # return "S"
-                    # case pygame.K_d:
-                    # return "D"
-                    # case pygame.K_f:
-                    # return "F"
-                    # case _:
-                    # print("Could not get Input")
-            if pygame.event.get(pygame.KEYUP):
-                Input.Keyboard.keyPress = False
-                # print('Funciona')
+            if pygame.event.get(pygame.KEYUP): # Se a tecla for "despressionada"
+                Input.Keyboard.keyPress = False # Desativa o estado de pressionamento de tecla
             else:
                 pass
 
         # TODO Figure out a way to get the pressed keys with a single function
+        # Função que retorna uma lista de teclas pressionadas
         def getPressedKeys() -> list:
-            ind = 0
-            time = 0
-            keys = []
-            lastKey = None
+            ind = 0 # Indice
+            time = 0 # Tempo
+            keys = [] # Lista de teclas
+            lastKey = None # Ultima tecla
 
-            while pygame.key.get_pressed():
+            while pygame.key.get_pressed(): # Enquanto houver eventos de pressionamento de tecla
                 key = Input.Keyboard.Update()
                 
-                if key != lastKey and key != None:
-                    
-                    keys.append(key)
-                    pygame.time.wait(30)
-                if ind >= 2:
-                    return keys
+                if key != lastKey and key != None: # Se a tecla for diferente da ultima tecla e não for nulo
+                    keys.append(key) # Adiciona a tecla no final da lista <keys>
+                    pygame.time.wait(120) # Espera 120 milésimos
+                if ind >= 2: # Se o indice for maior que dois, ou seja, tem três teclas na lista
+                    return keys # Retorna
                 lastKey = key
                 ind += 1
                 time += 1
@@ -88,30 +73,39 @@ class Input:
                 if keys[1] is not None:
                     pass
 
+    # Classe Joystick: Funções do controle
     class Joystick:
-        Joysticks = []
-        controllerCheckingIndex = 0
-        
+        Joysticks = [] # Lista de controles
+        controllerCheckingIndex = 0 # Quantidade de controles
+
+        # Remove o Controle por ID
         def RemoveJoystickByID(ID=int):
-            remDevice = Input.Joystick.Joysticks.pop(ID)
-            print(f"Removed {remDevice.get_name()}\n")
+            if len(Input.Joystick.Joysticks) > 0:
+                remDevice = Input.Joystick.Joysticks.pop(ID) # Utiliza a funçao padrão de lista <pop> para retornar as informações do controle para feedback visual
+                print(f"Removed {remDevice.get_name()}\n")
 
+        # Checa por controles
         def checkForJoysticks():
-            Input.Joystick.Joysticks.clear()
-            for joys in range(pygame.joystick.get_count()):
-                
-                Input.Joystick.Joysticks.append(pygame.joystick.Joystick(joys))
+            Input.Joystick.Joysticks.clear() # Limpa a lista
+            for joys in range(pygame.joystick.get_count()): # Utiliza o próprio pygame para obter a quantidade de controles conectados
+                Input.Joystick.Joysticks.append(pygame.joystick.Joystick(joys)) # Adiciona eles no final da lista
 
-            if Input.Joystick.controllerCheckingIndex >= 3:
+            if Input.Joystick.controllerCheckingIndex >= 3: # Limitador da quantidade de controles
                 Input.Joystick.controllerCheckingIndex = 0
 
+        # Imprime as informações de todos os controles
         def printJoysticksInfo():
             for joys in Input.Joystick.Joysticks:
                 print(f"-- Joysticks --\nID: {joys.get_instance_id()} - Name: {joys.get_name()}\n")
 
+        # Atualiza as entradas dos controles
         def Update():
-            # print(pygame.event.get())
-            try:
+            initInd = 0
+            if initInd == 0:
+                Input.Joystick.checkForJoysticks()
+                initInd += 1
+            try:    
+                # Se houver um evento de controle conectado
                 for device in pygame.event.get(
                     pygame.JOYDEVICEADDED
                 ) or pygame.event.get(pygame.JOYDEVICEREMOVED):
@@ -132,6 +126,7 @@ class Input:
             except:
                 print("-- Error detecting joystick -- Tried 3 Times --")
 
+            # Para cada evento de botão pressionado
             for joys in Input.Joystick.Joysticks:
                 for joyButton in pygame.event.get(pygame.JOYBUTTONDOWN):
                     match joyButton.button:
@@ -165,6 +160,7 @@ class Input:
                         case _:
                             print("Invalid Button")
 
+                # Para cada evento do D-Pad
                 for joyHat in pygame.event.get(pygame.JOYHATMOTION):
                     match joyHat.value:
                         case (1, 0):
@@ -180,8 +176,8 @@ class Input:
                             print(f"Controller {joyHat.joy} Hat Down")
                             return joyHat.joy
 
+                # Para cada evento do analógico esquerdo e direito e R2 e L2 com botão sensivel
                 for joyAxis in pygame.event.get(pygame.JOYAXISMOTION):
-                    
                     match joyAxis.axis:
                         case 0:
                             print(
@@ -209,16 +205,19 @@ class Input:
                         case 5:
                             print(f"Controller {joyAxis.joy} R2: Value {joyAxis.value}")
                             return joyAxis.value
-
+    # Classe Mouse: Funcções do Mouse
     class Mouse:
+        # Consegue a posição do mouse e retorna
         def getMousePosition():
-            if pygame.event.peek(pygame.MOUSEMOTION):
+            if pygame.event.peek(pygame.MOUSEMOTION): # Se houver um evento de movimento do mouse
                 for mouseEventMotion in pygame.event.get(pygame.MOUSEMOTION):
-                    return pygame.mouse.get_pos()
+                    return pygame.mouse.get_pos() # Retorna a posição
 
+        # Modifica a posição do mouse
         def setMousePosition(x=float, y=float):
             pygame.mouse.set_pos(x, y)
 
+        # Consegue os botões do mouse e retorna se não for nulo
         def getMouseButtons():
             if pygame.event.peek(pygame.MOUSEBUTTONDOWN):
                 for mouseEventButton in pygame.event.get(pygame.MOUSEBUTTONDOWN):
@@ -227,13 +226,16 @@ class Input:
                     else:
                         pass
 
+        # Retorna a entrada da roda do mouse
         def getMouseWheel():
             if pygame.event.peek(pygame.MOUSEWHEEL):
                 for mouseEventWheel in pygame.event.get(pygame.MOUSEWHEEL):
                     return mouseEventWheel
 
+    # Modifica a variável de execução
     def setRunVar(runVariable=bool):
         Input.runVar = runVariable
 
+    # Consegue a variável de execução
     def getRunVar():
         return Input.runVar

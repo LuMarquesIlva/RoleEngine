@@ -1,4 +1,6 @@
-#!.venv/Scripts/python.exe
+#/// script
+#!.venv/Scripts/python.exe -S uv run --script
+#///
 
 import threading
 from scripts.display import Display
@@ -50,11 +52,6 @@ while Input.getRunVar() is True:
         except TypeError as exc:
              raise exc
          
-
-        #if pygame.event.peek(pygame.KEYDOWN) > 1:
-            #eventString = eventString.join(pygame.event.get(pygame.KEYDOWN[1]))
-        #print(eventString)
-        #print("INPUT: " + str(eventString))
         for event in inputEvents:
             if eventString is not None:
                 match eventString:
