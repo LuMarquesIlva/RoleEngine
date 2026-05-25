@@ -8,6 +8,18 @@ import pygame
 class Object:
     # TODO Create an object system, mainly for GUI, but can be used for non drawable objects,
     # for logic purposes, with support for semi-dinamic, but mostly static objects
+    
+    def isColliding(OBJ1, OBJ2):
+        if type(OBJ1) == Object:
+            if OBJ1.RectObject[2].colliderect(OBJ2):
+                return True
+            else:
+                return False
+        elif type(OBJ1) == tuple:
+            if OBJ1[0] > OBJ2["RectObject"].left and OBJ1[0] < OBJ2["RectObject"].right and OBJ1[1] > OBJ2["RectObject"].top and OBJ1[1] < OBJ2["RectObject"].bottom:
+                return True
+            else:
+                return False
 
     class Rect:
         Id = 0

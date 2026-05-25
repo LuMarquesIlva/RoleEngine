@@ -4,6 +4,8 @@ import pygame
 
 class Input:
     runVar = bool
+    
+    displayDebugPrint = False
 
     def Update(): # Função Update Geral
 
@@ -75,6 +77,7 @@ class Input:
 
     # Classe Joystick: Funções do controle
     class Joystick:
+        printJoyValues = False
         Joysticks = [] # Lista de controles
         controllerCheckingIndex = 0 # Quantidade de controles
 
@@ -131,8 +134,9 @@ class Input:
                 for joyButton in pygame.event.get(pygame.JOYBUTTONDOWN):
                     match joyButton.button:
                         case 0:
-                            print(f"Controller {joyButton.joy} X")
-                            return joyButton.joy
+                           if Input.Joystick.printJoyValues == True:
+                               print(f"Controller {joyButton.joy} X")
+                           return joyButton.joy
                         case 1:
                             print(f"Controller {joyButton.joy} Circle")
                         case 2:
@@ -180,30 +184,34 @@ class Input:
                 for joyAxis in pygame.event.get(pygame.JOYAXISMOTION):
                     match joyAxis.axis:
                         case 0:
-                            print(
-                                f"Controller {joyAxis.joy} Left Analog V: Value {joyAxis.value}"
-                            )
+                            if Input.displayDebugPrint == True:
+                                print(f"Controller {joyAxis.joy} Left Analog V: Value {joyAxis.value}")
                             return joyAxis.value
                         case 1:
-                            print(
+                            if Input.displayDebugPrint == True:
+                                print(
                                 f"Controller {joyAxis.joy} Left Analog H: Value {joyAxis.value}"
                             )
                             return joyAxis.value
                         case 2:
-                            print(
+                            if Input.displayDebugPrint == True:
+                                print(
                                 f"Controller {joyAxis.joy} Right Analog V: Value {joyAxis.value}"
                             )
                             return joyAxis.value
                         case 3:
-                            print(
+                            if Input.displayDebugPrint == True:
+                                print(
                                 f"Controller {joyAxis.joy} Right Analog H: Value {joyAxis.value}"
                             )
                             return joyAxis.value
                         case 4:
-                            print(f"Controller {joyAxis.joy} L2: Value {joyAxis.value}")
+                            if Input.displayDebugPrint == True:
+                                print(f"Controller {joyAxis.joy} L2: Value {joyAxis.value}")
                             return joyAxis.value
                         case 5:
-                            print(f"Controller {joyAxis.joy} R2: Value {joyAxis.value}")
+                            if Input.displayDebugPrint == True:
+                                print(f"Controller {joyAxis.joy} R2: Value {joyAxis.value}")
                             return joyAxis.value
     # Classe Mouse: Funcções do Mouse
     class Mouse:
@@ -231,6 +239,24 @@ class Input:
             if pygame.event.peek(pygame.MOUSEWHEEL):
                 for mouseEventWheel in pygame.event.get(pygame.MOUSEWHEEL):
                     return mouseEventWheel
+                    
+    class TouchScreen:
+        x, y = 0.0, 0.0
+        
+        def isTouching():
+            if pygame.event.peek(pygame.FINGERDOWN, pygame.FINGERMOTION):
+                return True
+            elif pygame.event.peek(pygame.FINGERUP):
+                return False
+        
+        def getTouchPos():
+            if pygame.event.peek(pygame.FINGERDOWN) or pygame.event.peek(pygame.FINGERMOTION):
+                for TouchEvent in pygame.event.get(pygame.FINGERMOTION, pygame.FINGERDOWN):
+                    posX = TouchEvent.x * pygame.display.Info().current_w
+                    posY = TouchEvent.y * pygame.display.Info().current_h
+                
+                    return (posX, posY)
+                
 
     # Modifica a variável de execução
     def setRunVar(runVariable=bool):

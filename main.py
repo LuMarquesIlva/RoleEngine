@@ -23,7 +23,7 @@ def updateScreen():
 Input.Joystick.printJoysticksInfo()
 Input.Joystick.RemoveJoystickByID(0)
 
-teste = Object.Rect.createRectObject(0, "Teste", (300, 400, 40.0, 40.0))
+teste = Object.Rect.createRectObject(0, "Teste", (300, 400, 80.0, 80.0))
 
 def draw():
     Display.Fill(Display.BG_COLOR)
@@ -35,6 +35,18 @@ if not pygame.font.get_init():
     pygame.font.init()
 
 while Input.getRunVar() is True:
+    TouchInput = Input.TouchScreen.getTouchPos()
+    
+    if TouchInput != None and Input.displayDebugPrint == True:
+        print(TouchInput)
+        
+    if Input.TouchScreen.isTouching():
+        
+        if Object.isColliding(TouchInput, teste):
+            if Input.displayDebugPrint == True:
+                print(Object.isColliding(TouchInput, teste))
+            teste["RectObject"].centerx = TouchInput[0]
+            teste["RectObject"].centery = TouchInput[1]
     
     inputEvents = Input.Update()
 
@@ -43,15 +55,15 @@ while Input.getRunVar() is True:
         pygame.quit()
         break
 
-    while inputEvents is not None and type(inputEvents) is not int and pygame.event.peek(pygame.KEYUP) == False:
-        print(inputEvents)
+    while inputEvents is not None and type(inputEvents) is str and pygame.event.peek(pygame.KEYUP) == False:
+        #print(inputEvents)
         
         try:
             if type(inputEvents) == str:
                 eventString = ''.join(inputEvents)
         except TypeError as exc:
              raise exc
-         
+        
         for event in inputEvents:
             if eventString is not None:
                 match eventString:
