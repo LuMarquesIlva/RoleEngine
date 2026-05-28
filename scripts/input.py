@@ -1,4 +1,5 @@
 from scripts.display import Display as DP
+from scripts.objects import Rect
 
 import pygame
 
@@ -239,23 +240,30 @@ class Input:
             if pygame.event.peek(pygame.MOUSEWHEEL):
                 for mouseEventWheel in pygame.event.get(pygame.MOUSEWHEEL):
                     return mouseEventWheel
-                    
+    
+    # Classe TouchScreen
     class TouchScreen:
-        x, y = 0.0, 0.0
+        x, y = 0.0, 0.0 # Posição
+        position = (x, y)
+        TouchDebug = False # Debug
         
-        def isTouching():
+        def printTouchDebug(x = Rect):
+            if Input.TouchScreen.TouchDebug is True:
+                print(f"{x.ID} -> {x.Name} {x.Obj.x} | {x.Obj.y}")
+        
+        def isTouching(): # Retorna se o usuário está tocando na tela
             if pygame.event.peek(pygame.FINGERDOWN, pygame.FINGERMOTION):
                 return True
             elif pygame.event.peek(pygame.FINGERUP):
                 return False
         
-        def getTouchPos():
+        def getTouchPos(): # Retorna a posição do toque
             if pygame.event.peek(pygame.FINGERDOWN) or pygame.event.peek(pygame.FINGERMOTION):
                 for TouchEvent in pygame.event.get(pygame.FINGERMOTION, pygame.FINGERDOWN):
-                    posX = TouchEvent.x * pygame.display.Info().current_w
-                    posY = TouchEvent.y * pygame.display.Info().current_h
+                    x = TouchEvent.x * pygame.display.Info().current_w
+                    y = TouchEvent.y * pygame.display.Info().current_h
                 
-                    return (posX, posY)
+                    return (x, y)
                 
 
     # Modifica a variável de execução
