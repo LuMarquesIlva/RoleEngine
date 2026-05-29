@@ -9,11 +9,25 @@ class Object:
     Position = (float, float)
     Rotation = (float, float)
     Scale = (float, float)
+
+    Z = int
     
     RenderList = []
     
     def addToRenderList(self):
-        Object.RenderList.append(self)
+        if self.Z <= len(Object.RenderList):
+            print(self.Z)
+            Object.RenderList.append(self)
+        elif self.Z > len(Object.RenderList):
+            print("LENGHT" + str(len(Object.RenderList)))
+            for Index in range(self.Z-1):
+                if Object.RenderList[Index] is None:
+                    Object.RenderList.append(None)
+                print(Object.RenderList)
+                if Index < len(Object.RenderList) and Object.RenderList[Index] == None:
+                    Object.RenderList.insert(Index, None)
+                else:
+                    continue
     
     def isColliding(self, OBJ1):
         if type(OBJ1) == Rect:
@@ -40,7 +54,7 @@ class Rect(Object):
         
 # -------- Construtor --------
 
-    def __init__(self, Id=int, name=str, area=(float, float, float, float), Color=(float, float, float, float)):
+    def __init__(self, ID=int, Layer=int, name=str, area=(float, float, float, float), Color=(float, float, float, float)):
         
         self.Position = (area[0], area[1])
         self.Scale = (area[2], area[3])
@@ -50,10 +64,11 @@ class Rect(Object):
         
         rect = pygame.rect.Rect(self.Position[0], self.Position[1], self.Scale[0], self.Scale[1])
         
-        self.ID = Id
+        self.ID = ID
         self.Name = name
         self.Obj = rect
         self.Color = Color
+        self.Z = Layer
         
         self.addToRenderList()
         

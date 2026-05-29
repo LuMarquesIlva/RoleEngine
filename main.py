@@ -17,11 +17,11 @@ eventString = None
 Input.Joystick.printJoysticksInfo()
 Input.Joystick.RemoveJoystickByID(0)
 
-teste = Rect(0, "Teste", (300, 400, 800.0, 80.0), (200, 200, 200, 100))
+teste = Rect(0, 0, "Teste", (10, 10, 90.0, 80.0), (200, 200, 200, 100))
 
-teste2 = Rect(1, "Teste2", (600, 600, 100.0, 100.0), (150, 200, 125, 100))
+teste2 = Rect(1, 2, "Teste2", (50, 50, 100.0, 100.0), (150, 200, 125, 100))
 
-teste3 = Rect(2, "Teste3", (500, 600, 50, 50), (170, 180, 90, 100))
+teste3 = Rect(2, 1, "Teste3", (25, 25, 50, 50), (170, 180, 90, 100))
 
 def draw():
     Display.Fill(Display.BG_COLOR) # Limpa a tela com a cor de fundo
@@ -32,12 +32,13 @@ if not pygame.font.get_init():
     pygame.font.init()
     
     
-    
 TouchInput = Input.TouchScreen
 
 while Input.getRunVar() is True: # Enquanto RunVar for verdadeira
-    touchPos = TouchInput.getTouchPos()
     inputEvents = Input.Update()
+
+    touchPos = TouchInput.getTouchPos()
+    mousePos = Input.Mouse.getMousePosition()
         
     if TouchInput.isTouching():
         for x in Object.RenderList:
@@ -45,12 +46,18 @@ while Input.getRunVar() is True: # Enquanto RunVar for verdadeira
                 x.Obj.centerx = touchPos[0]
                 x.Obj.centery = touchPos[1]
                 
-                Input.TouchScreen.TouchDebug = True
+                Input.TouchScreen.TouchDebug = False
                 Input.TouchScreen.printTouchDebug(x)
     
-    if teste.isColliding(teste2):
-        print("Colidiu")
-    
+    if Input.Mouse.isPressingButton():
+        button1 = Input.Mouse.getMouseButtons(1)
+
+        if button1 == "MouseLeft":
+            for x in Object.RenderList:
+                if x.isColliding(mousePos):
+                    x.Obj.centerx = mousePos[0]
+                    x.Obj.centery = mousePos[1]
+        
     
     if inputEvents == "q" or inputEvents == "menu" or inputEvents == pygame.QUIT:
         Input.setRunVar(False)

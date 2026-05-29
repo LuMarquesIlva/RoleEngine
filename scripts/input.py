@@ -29,6 +29,7 @@ class Input:
             joys = Input.Joystick.Update() # Consegue os eventos e coloca na variável joys
             if joys is not None: # Retorna se não for um valor nulo
                 return joys
+            
             Input.Display.Update()
 
     # Classe display: Funções da janela
@@ -217,26 +218,40 @@ class Input:
     # Classe Mouse: Funcções do Mouse
     class Mouse:
         # Consegue a posição do mouse e retorna
-        def getMousePosition():
+        def getMousePosition() -> tuple:
             if pygame.event.peek(pygame.MOUSEMOTION): # Se houver um evento de movimento do mouse
                 for mouseEventMotion in pygame.event.get(pygame.MOUSEMOTION):
                     return pygame.mouse.get_pos() # Retorna a posição
 
         # Modifica a posição do mouse
-        def setMousePosition(x=float, y=float):
+        def setMousePosition(x=float, y=float) -> None:
             pygame.mouse.set_pos(x, y)
 
-        # Consegue os botões do mouse e retorna se não for nulo
-        def getMouseButtons():
+        def isPressingButton():
             if pygame.event.peek(pygame.MOUSEBUTTONDOWN):
-                for mouseEventButton in pygame.event.get(pygame.MOUSEBUTTONDOWN):
-                    if mouseEventButton.button != None:
-                        return mouseEventButton.button
-                    else:
-                        pass
+                return True
+            elif pygame.event.peek(pygame.MOUSEBUTTONUP):
+                return False
+            
+        def isMoving() -> bool:
+            if pygame.event.peek(pygame.MOUSEMOTION):
+                for mouseEventMotion in pygame.event.get(pygame.MOUSEMOTION):
+                    return True
+                else:
+                    return False
+
+        # Consegue os botões do mouse e retorna se não for nulo
+        def getMouseButtons(button=1 or 2 or 3):
+            if pygame.event.peek(pygame.MOUSEBUTTONDOWN) or pygame.event.peek(pygame.MOUSEBUTTONUP):
+                for buttons in pygame.mouse.get_pressed():
+                    match buttons:
+                        case 1: return "MouseLeft"
+                        case 2: return "MouseRight"
+                        case 3: return "MouseMiddle"
+                        case _: return None
 
         # Retorna a entrada da roda do mouse
-        def getMouseWheel():
+        def getMouseWheel() -> float:
             if pygame.event.peek(pygame.MOUSEWHEEL):
                 for mouseEventWheel in pygame.event.get(pygame.MOUSEWHEEL):
                     return mouseEventWheel
